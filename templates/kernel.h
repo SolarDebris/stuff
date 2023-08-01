@@ -11,7 +11,8 @@
 #include <stdint.h>
 
 #define PAGE_SIZE 0x1000
-#define TTY_STRUCT_SZIE 0x2E0
+#define TTY_STRUCT_SIZE 0x2E0
+#define CRED_STRUCT_SIZE 0xA8
 
 void shell(){
     if(!getuid()){
