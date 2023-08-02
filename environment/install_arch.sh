@@ -67,7 +67,7 @@ install_term_utils(){
 	    cronie \
 	    curl \
 	    docker \
-      elfutils \
+            elfutils \
 	    emacs \
 	    exa \
 	    feh \
@@ -78,7 +78,7 @@ install_term_utils(){
 	    g++ \
 	    gdb \
 	    make \
-      man \
+      	    man \
 	    man-db \
 	    net-tools \
 	    neofetch \
