@@ -164,7 +164,7 @@ install_arm(){
   echo "Installing ARM tools"
   sudo pacman -S \
     arm-none-eabi-binutils \
-	  arm-none-eabi-gcc 
+    arm-none-eabi-gcc 
 
 }
 
