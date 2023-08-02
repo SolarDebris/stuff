@@ -9,7 +9,7 @@ update(){
 }
 
 cd ~
-mkdir fitsec build development applications src
+mkdir fitsec build development applications src vr vr/ios vr/linux vr/windows vr/browser
 
 # Install languages and lsps
 install_langs(){
