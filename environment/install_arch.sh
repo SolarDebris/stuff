@@ -9,7 +9,7 @@ update(){
 }
 
 cd ~
-mkdir fitsec build development applications src vr vr/ios vr/linux vr/windows vr/browser
+mkdir -p fitsec build development applications src vr vr/ios vr/linux vr/windows vr/browser
 
 # Install languages and lsps
 install_langs(){
@@ -28,9 +28,14 @@ install_paru(){
 	rustup default stable
 }
 
-echo "Installing Desktop Environment and Display Servers"
-# Install desktop environments
-sudo pacman -S wayland
+install_display(){
+    echo "Installing Desktop Environment and Display Servers"
+    # Install desktop environments
+    sudo pacman -S wayland \
+        sway 
+
+
+}
 
 install_audio(){
 
@@ -50,9 +55,11 @@ install_audio(){
 
 # Install Browsers
 
-echo "Installing Browsers and Dependencies"
-sudo pacman -S firefox
-paru -S brave-bin
+install_browser(){
+    echo "Installing Browsers and Dependencies"
+    sudo pacman -S firefox
+    paru -S brave-bin
+}
 
 # Install Terminal Utils
 install_term_utils(){
@@ -67,7 +74,7 @@ install_term_utils(){
 	    cronie \
 	    curl \
 	    docker \
-            elfutils \
+        elfutils \
 	    emacs \
 	    exa \
 	    feh \
@@ -78,7 +85,7 @@ install_term_utils(){
 	    g++ \
 	    gdb \
 	    make \
-      	    man \
+      	man \
 	    man-db \
 	    net-tools \
 	    neofetch \
@@ -129,9 +136,15 @@ install_python(){
   python3 -m pip install \ 
      angr \
      capstone \
+     Flask \
+     Flask-Cors \
      keystone-engine \
+     matplotlib \
      opencv-python \
+     numpy \
      pwntools \
+     pycryptodome \
+     requests \
      ropgagdet \
      unicorn \
      z3-solver
@@ -192,5 +205,19 @@ install_dbg(){
 
 }
 
-echo "Installing CTF Tools"
+install_ctf() {
+    echo "Installing CTF Tools"
+}
+
+install_config() {
+    cd ~/build
+    git clone https://github.com/SolarDebris/dotfiles 
+    cp -r ~/build/dotfiles/.config ~/
+    cp -r ~/build/dotfiles/.doom.d ~/
+    cp -r ~/build/dotfiles/.tmux ~/
+    cp -r ~/build/dotfiles/.bashrc ~/
+    cp -r ~/build/dotfiles/.tmux.conf ~/
+    cp -r ~/build/dotfiles/.vimrc ~/
+    cp -r ~/build/dotfiles/.zshrc ~/
+}
 
