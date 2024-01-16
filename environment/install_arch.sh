@@ -12,32 +12,50 @@ cd ~
 mkdir -p fitsec build development applications src vr vr/ios vr/linux vr/windows vr/browser
 
 # Install languages and lsps
-install_langs(){
-  echo "Installing languages and lsps"
+langs(){
+	echo "Installing languages and lsps"
+  	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+  	sudo pacman -S cmake \
+  		haskell \
+   		java \
+  		julia \
+		neovim \
+ 		nodejs \
+  		npm \ 
+		python3 \
+ 		ruby
 }
 
 
 # Install Paru
-install_paru(){
+paru(){
 	echo "Installing Paru (AUR Helper)\n"
 
 	cd ~/build
-	git clone https://aur.archlinux.org/paru.git
+	[ ! -d 'paru' ] && git clone https://aur.archlinux.org/paru.git
 	cd paru
+ 	rustup default stable
 	makepkg -si 
-	rustup default stable
+	
 }
 
-install_display(){
-    echo "Installing Desktop Environment and Display Servers"
+display(){
+	echo "Installing Desktop Environment and Display Servers"
     # Install desktop environments
+    
     sudo pacman -S wayland \
-        sway 
+        sway \
+		swaybg \
+ 		wofi \
+  		waybar 
 
-
+   	sudo pacman -S xorg \
+   		xorg-server \
+    	xorg-xinit 
 }
 
-install_audio(){
+audio(){
 
 	echo "Installing Audio Server (Pipewire)"
 	# Install pipewire
@@ -55,14 +73,14 @@ install_audio(){
 
 # Install Browsers
 
-install_browser(){
+browser(){
     echo "Installing Browsers and Dependencies"
     sudo pacman -S firefox
     paru -S brave-bin
 }
 
 # Install Terminal Utils
-install_term_utils(){
+term_utils(){
 
     echo "Installing Terminal Utilities"
     sudo pacman -S alacritty \
@@ -99,7 +117,7 @@ install_term_utils(){
 	    xxd
 }
 
-install_extra(){
+extra(){
 
   echo "Installing Extra Packages"
   # Install extra packages
@@ -131,7 +149,7 @@ install_extra(){
 	  zathura
 }
 
-install_python(){
+python(){
   echo "Installing python packages"
   python3 -m pip install \ 
      angr \
@@ -151,18 +169,38 @@ install_python(){
   
 }
 
-install_docker(){
+docker(){
     echo "Installing Docker"
+	sudo pacman -S docker \
+ 		docker-compose
+   
 }
 
 install_qemu(){
-  echo "Installing QEMU"
+	echo "Installing QEMU and VM Tools"
+  	sudo pacman -S qemu-full \
+  		dnsmasq \
+   		vde2 \
+    	dmidecode \
+   		virt-manager \
+   		virt-viewer \
+    	bridge-utils \
+    	openbsd-netcat \
+    	iptables \
+    	ebtables \
+		libguestfs 
+	sudo systemctl enable libvirtd.service && sudo systemctl start libvirtd.service
+https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_linux.x86_64.zip
+  	sudo usermod -aG libvirt $(whoami)
+   	newgrp libvirt
+   	sudo systemctl restart libvirtd.service 
+ 
 }
 
-install_binja(){
+binja(){
   echo "Installing Binary Ninja"
   # Get the source
-  git clone https://github.com/Vector35/binaryninja-api.git ~/build/binaryninja-api
+  [ ! -d '~/build/binaryninja-api' ] && git clone https://github.com/Vector35/binaryninja-api.git ~/build/binaryninja-api
   cd ~/build/binaryninja-api
   git submodule update --init --recursive
 
@@ -173,51 +211,76 @@ install_binja(){
   cmake --build build -j8
 }
 
-install_arm(){
-  echo "Installing ARM tools"
-  sudo pacman -S \
-    arm-none-eabi-binutils \
-    arm-none-eabi-gcc 
+arm(){
+	echo "Installing ARM tools"
+  	sudo pacman -S \
+	    arm-none-eabi-binutils \
+    	arm-none-eabi-gcc 
 
 }
 
-install_afl(){
-  echo "Installing AFL++"
+afl(){
+  	echo "Installing AFL++"
 }
 
-install_libraries(){
-  echo "Installing extra libraries"
+libraries(){
+  	echo "Installing extra libraries"
 }
 
-install_dbg(){
-  echo "Installing gdb multiarch" 
+dbg(){
+	
+  	echo "Installing gdb multiarch" 
 
-  echo "Installing pwndbg"
-  git clone https://github.com/pwndbg/pwndbg ~/build/pwndbg
-  cd ~/build/pwndbg
-  chmod +x setup.py
-  ./setup.py
+ 	 echo "Installing pwndbg"
+  	[ ! -d '~/build/pwndbg' ] && git clone https://github.com/pwndbg/pwndbg ~/build/pwndbg
+  	cd ~/build/pwndbg
+  	chmod +x setup.py
+  	./setup.py
 
-  echo "Installing lldb"
+  	echo "Installing lldb"
 
-  echo "Installing Frida"
-  pip3 install frida-tools
+  	echo "Installing Frida"
+ 	pip3 install frida-tools
 
 }
 
-install_ctf() {
+ctf() {
     echo "Installing CTF Tools"
 }
 
-install_config() {
-    cd ~/build
-    git clone https://github.com/SolarDebris/dotfiles 
-    cp -r ~/build/dotfiles/.config ~/
-    cp -r ~/build/dotfiles/.doom.d ~/
-    cp -r ~/build/dotfiles/.tmux ~/
-    cp -r ~/build/dotfiles/.bashrc ~/
-    cp -r ~/build/dotfiles/.tmux.conf ~/
-    cp -r ~/build/dotfiles/.vimrc ~/
-    cp -r ~/build/dotfiles/.zshrc ~/
+gamedev(){
+	echo "Installing Raylib"
+	sudo pacman -S alsa-lib \
+ 		mesa \
+   		libx11 \
+	 	libxrandr \
+   		libxi \
+	 	libxcursor \
+   		libxinerama 
+	[ ! "~/build/raylib"] && git clone https://github.com/raysan5/raylib.git ~/build/raylib
+ 	cd ~/build/raylib
+  	mkdir build && cd build
+   	cmake -DBUILD_SHARED_LIBS=ON -DUSE_WAYLAND=ON
+	make 
+ 	sudo make install
+
+  	echo "Installing Godot"
+   	cd ~/build
+   	wget https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_linux.x86_64.zip
+	7z x Godot_v4.2.1-stable_linux.x86_64.zip
+ 	mv Godot_v4.2.1-stable_linux.x86_64 Godot
+  
+}
+
+config() {
+    
+    [ ! -d 'dotfiles' ] && git clone https://github.com/SolarDebris/dotfiles 
+    cp -r ~/dotfiles/.config ~/
+    cp -r ~/dotfiles/.doom.d ~/
+    cp -r ~/dotfiles/.tmux ~/
+    cp -r ~/dotfiles/.bashrc ~/
+    cp -r ~/dotfiles/.tmux.conf ~/
+    cp -r ~/dotfiles/.vimrc ~/
+    cp -r ~/dotfiles/.zshrc ~/
 }
 
