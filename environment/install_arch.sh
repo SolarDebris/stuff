@@ -170,10 +170,13 @@ python(){
 }
 
 docker(){
-    echo "Installing Docker"
+	echo "Installing Docker"
 	sudo pacman -S docker \
  		docker-compose
-   
+   	sudo usermod -aG docker $(whoami)
+	newgrp docker
+	sudo systemctl enable docker
+ 	sudo systemctl start docker
 }
 
 install_qemu(){
