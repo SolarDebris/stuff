@@ -26,6 +26,9 @@ devtools(){
     		pkgconfig \
 		python3 \
  		ruby
+
+   	cd ~/
+    	ssh-keygen
 }
 
 
