@@ -23,3 +23,5 @@ RUN apt-get install -y curl \
     python3 \
     python3-pip \
     ninja-build
+
+# Install AFL++
