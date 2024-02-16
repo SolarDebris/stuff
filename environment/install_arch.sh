@@ -12,7 +12,7 @@ cd ~
 mkdir -p fitsec build development applications src vr vr/ios vr/linux vr/windows vr/browser
 
 # Install languages and lsps
-langs(){
+devtools(){
 	echo "Installing languages and lsps"
   	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
@@ -23,6 +23,7 @@ langs(){
 		neovim \
  		nodejs \
   		npm \ 
+    		pkgconfig \
 		python3 \
  		ruby
 }
