@@ -1,5 +1,5 @@
 # Scripts
-A collection of scripts that I have created and used for various things
+A collection of scripts and templates that I have created and used for various things
 
 # Ideas
 Some ideas that I have to make into shell scripts are:
