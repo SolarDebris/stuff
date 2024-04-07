@@ -4,8 +4,8 @@
 
 # Function to update to use througout the program
 update(){
-	sudo pacman -Syy
-	sudo pacman -Syu
+	sudo pacman -Syy --noconfirm
+	sudo pacman -Syu --noconfirm
 }
 
 cd ~
@@ -13,22 +13,37 @@ mkdir -p fitsec build development applications src vr vr/ios vr/linux vr/windows
 
 # Install languages and lsps
 devtools(){
-	echo "Installing languages and lsps"
+	echo "Installing devtools languages and lsps"
   	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-  	sudo pacman -S cmake \
+  	sudo pacman -S --noconfirm autoconf \
+        automake \
+        clang \
+        cmake \
+        gdb \
+        gdb-common \
+        ghc \
+        gnupg \
+        go \
   		haskell \
    		java \
   		julia \
+        llvm \
+        lua \
+        make \
+        meson \
 		neovim \
+        ninja \
  		nodejs \
   		npm \ 
-    		pkgconfig \
+    	pkgconfig \
 		python3 \
- 		ruby
-
-   	cd ~/
-    	ssh-keygen
+        ripgrep \
+ 		ruby \
+        tree-sitter \
+        ttf-firacode-nerd \
+        ttf-nerd-fonts-symbols \
+        zoxide
 }
 
 
@@ -48,22 +63,26 @@ display(){
 	echo "Installing Desktop Environment and Display Servers"
     # Install desktop environments
     
-    sudo pacman -S wayland \
+    sudo pacman -S --noconfirm glfw-wayland \
         sway \
 		swaybg \
+        qt5-wayland \
  		wofi \
-  		waybar 
+  		waybar \
+        wayland 
+        
 
    	sudo pacman -S xorg \
    		xorg-server \
-    	xorg-xinit 
+    	xorg-xinit \
+        xorg-xwayland
 }
 
 audio(){
 
 	echo "Installing Audio Server (Pipewire)"
 	# Install pipewire
-	sudo pacman -S pipewire \
+	sudo pacman -S  --noconfirm pipewire \
 		lib32-pipewire \
 		wireplumber \
 		pipewire-audio \
@@ -79,7 +98,7 @@ audio(){
 
 browser(){
     echo "Installing Browsers and Dependencies"
-    sudo pacman -S firefox
+    sudo pacman -S --noconfirm firefox
     paru -S brave-bin
 }
 
@@ -87,7 +106,7 @@ browser(){
 term_utils(){
 
     echo "Installing Terminal Utilities"
-    sudo pacman -S alacritty \
+    sudo pacman -S --noconfirm alacritty \
 	    bat \
 	    binutils \
 	    binwalk \
@@ -125,7 +144,7 @@ extra(){
 
   echo "Installing Extra Packages"
   # Install extra packages
-  sudo pacman -S aircrack-ng \
+  sudo pacman -S --noconfirm aircrack-ng \
 	  arandr \
 	  audacity \
 	  feroxbuster \
@@ -175,7 +194,7 @@ python(){
 
 docker(){
 	echo "Installing Docker"
-	sudo pacman -S docker \
+	sudo pacman -S --noconfirm docker \
  		docker-compose
    	sudo usermod -aG docker $(whoami)
 	newgrp docker
@@ -185,7 +204,7 @@ docker(){
 
 install_qemu(){
 	echo "Installing QEMU and VM Tools"
-  	sudo pacman -S qemu-full \
+  	sudo pacman -S --noconfirm qemu-full \
   		dnsmasq \
    		vde2 \
     	dmidecode \
@@ -220,7 +239,7 @@ binja(){
 
 arm(){
 	echo "Installing ARM tools"
-  	sudo pacman -S \
+  	sudo pacman -S --noconfirm \
 	    arm-none-eabi-binutils \
     	arm-none-eabi-gcc 
 
@@ -228,10 +247,42 @@ arm(){
 
 afl(){
   	echo "Installing AFL++"
+    sudo pacman -S --noconfirm base-devel \
+        flex \
+        bison 
+    
+    cd ~/build
+    git clone --recursive https://github.com/AFLplusplus/AFLplusplus 
+    
+    cd ~/build/AFLplusplus
+    make all 
+    sudo make install
+
+    
+    cd ~/build
+    git clone --recursive https://github.com/AFLplusplus/LibAFL
+
 }
 
 libraries(){
   	echo "Installing extra libraries"
+}
+
+
+frida(){
+    echo "Installing Frida"
+    cd ~/build
+    git clone --recurse-submodules https://github.com/frida/frida
+    cd ~/build/frida
+    make core-linux-x86_64 NODE=$(which node) PYTHON=$(which python3)
+    make python-linux-x86_64 NODE=$(which node) PYTHON=$(which python3)
+}
+
+webdev(){
+    echo "Installing web development tools"
+    sudo pacman -S --noconfirm \
+        nodejs \
+        npm
 }
 
 dbg(){
@@ -245,14 +296,10 @@ dbg(){
   	./setup.py
 
   	echo "Installing lldb"
+    sudo pacman -S lldb
 
-  	echo "Installing Frida"
  	pip3 install frida-tools
 
-}
-
-ctf() {
-    echo "Installing CTF Tools"
 }
 
 gamedev(){
@@ -289,5 +336,10 @@ config() {
     cp -r ~/dotfiles/.tmux.conf ~/
     cp -r ~/dotfiles/.vimrc ~/
     cp -r ~/dotfiles/.zshrc ~/
+    cp -r ~/dotfiles/emacs ~/.emacs.d
 }
 
+#afl
+#
+#
+frida
