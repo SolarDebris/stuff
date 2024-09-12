@@ -6,7 +6,7 @@ context.update(
         endian="little",
         log_level="debug",
         os="linux",
-        terminal=["st"]
+        terminal=["alacritty", "-e"]
 )
 
 to = 2
