@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python
 from pwn import *
 
 context.update(
@@ -18,6 +18,7 @@ up = lambda b: int.from_bytes(b, byteorder="little")
 
 SERVICE = ""
 PORT = 1234
+
 
 def start(binary):
 
@@ -68,6 +69,7 @@ if __name__=="__main__":
 
     p = start(file)
     e = context.binary = ELF(file)
+    
     #l = ELF("./libc.so.6")
 
     exploit(p,e)

@@ -174,8 +174,7 @@ extra(){
 
 python(){
   echo "Installing python packages"
-  python3 -m pip install \ 
-     angr \
+  python3 -m pip install --break-system-packages angr \
      capstone \
      Flask \
      Flask-Cors \
@@ -202,7 +201,7 @@ docker(){
  	sudo systemctl start docker
 }
 
-install_qemu(){
+qemu(){
 	echo "Installing QEMU and VM Tools"
   	sudo pacman -S --noconfirm qemu-full \
   		dnsmasq \
@@ -247,6 +246,12 @@ arm(){
 
 afl(){
   	echo "Installing AFL++"
+    cd ~/build/
+    git clone https://github.com/AFLplusplus/AFLplusplus
+    cd AFLplusplus
+    make all
+    sudo make install
+ 
     sudo pacman -S --noconfirm base-devel \
         flex \
         bison 
@@ -326,6 +331,25 @@ gamedev(){
   
 }
 
+webdev(){
+    echo "Installing web development tools"
+    sudo pacman -S nodejs \
+        npm
+
+    pip3 install --break-system-packages flask \
+        flask-cors \
+        django
+
+}
+
+
+creative(){
+    echo "Installing creative tools"
+    sudo pacman -S blender \
+        imagemagick \
+        gimp 
+}
+
 config() {
     
     [ ! -d 'dotfiles' ] && git clone https://github.com/SolarDebris/dotfiles 
@@ -339,7 +363,12 @@ config() {
     cp -r ~/dotfiles/emacs ~/.emacs.d
 }
 
-#afl
-#
-#
-frida
+discord(){
+    paru -S discord
+
+    cd ~/.config/discord
+
+    echo "{ SKIP_HOST_UPDATE: true }" > settings.json
+
+}
+
